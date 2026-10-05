@@ -1,0 +1,33 @@
+# Virtual Environments 
+.venv/
+venv/
+ENV/
+env/
+
+# Datasets & Test Footage 
+data/
+ref/
+test_on_video/
+*.mp4
+*.avi
+*.mov
+
+# Weights, Checkpoints & Model Outputs
+checkpoints/
+*.pth
+*.pt
+*.onnx
+
+# Python & Jupyter Caches
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+
+# VS Code & Environment Configs
+.vscode/
+.env
+
+# System Files
+.DS_Store
+Thumbs.db

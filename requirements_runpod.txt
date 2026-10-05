@@ -1,0 +1,26 @@
+# Mamba Architecture High-Performance CUDA Kernels
+causal-conv1d>=1.2.0
+mamba-ssm>=1.2.0
+
+# Computer Vision (Headless version for Server/Container Linux)
+opencv-python-headless
+pillow
+scikit-image
+albumentations
+
+# Tensor Operations & Architecture Dependencies
+einops
+scipy
+h5py
+
+# Metrics & Evaluation (Hitung PSNR, SSIM, UIQM, UCIQE otomatis)
+torchmetrics
+pyiqa
+
+# Utilities, Plotting & Jupyter Environment
+matplotlib
+tqdm
+pandas
+numpy
+jupyterlab
+ipykernel
