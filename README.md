@@ -6,7 +6,9 @@
 
 Retraining **BVI-Mamba**, a low-light video enhancement model, on paired underwater footage, with a complete and reproducible pipeline: preprocessing, training, and tiled video inference.
 
-![Before and after](assets/footage_1_before_after.gif)
+![Before (left) and after (right)](before_after_sample.jpg)
+
+_Left: original frame. Right: enhanced by the retrained BVI-Mamba. The footage was not part of the training data._
 
 > This is an independent experiment. It is not affiliated with the BVI-Mamba authors, and the weights released here are **not** the weights from the original paper (see [Credits](#credits-citation-and-license)).
 
@@ -45,32 +47,42 @@ Everything was developed on a laptop (Windows, preprocessing only) and a single 
 
 ## Results
 
-Before (left) and after (right):
-
-| Footage 1                                       | Footage 2                                       |
-| ----------------------------------------------- | ----------------------------------------------- |
-| ![footage 1](assets/footage_1_before_after.gif) | ![footage 2](assets/footage_2_before_after.gif) |
+The comparison image at the top of this page is a single frame from the demo footage, with the original on the left and the enhanced result on the right.
 
 Training summary:
 
-| Item                 | Value                                                            |
-| -------------------- | ---------------------------------------------------------------- |
-| Model                | `STASUNet` (BVI-Mamba), 10.00 M parameters                       |
-| Training             | From scratch, L1 loss, Adam                                      |
-| Hardware             | 1x RTX 4000 Ada (20 GB), about 9.5 GB VRAM used at batch size 4  |
-| Speed                | about 0.97 s per iteration, about 8.2 min per 2,000-sample epoch |
-| Epochs completed     | `[TODO: fill from checkpoints/log.csv]`                          |
-| GPU time             | `[TODO: hours]`                                                  |
-| Best validation PSNR | `[TODO: dB]` (see the caveat below)                              |
+| Item                 | Value                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model                | `STASUNet` (BVI-Mamba), 10.00 M parameters                                                                                                                |
+| Training             | From scratch, L1 loss, Adam                                                                                                                               |
+| Hardware             | 1x RTX 4000 Ada (20 GB), about 9.5 GB VRAM used at batch size 4                                                                                           |
+| Speed                | about 0.97 s per iteration, about 8.2 min per 2,000-sample epoch                                                                                          |
+| Epochs completed     | 26 (epochs 0 to 25). Training was stopped by hand because of the compute budget, far before `maxepoch: 60`, while the training loss was still decreasing. |
+| Training volume      | 52,000 samples (13,000 iterations at batch size 4), about 15 times the 3,477 training samples, drawn with replacement and balanced across categories      |
+| GPU time             | about 3.6 hours (214 minutes, summed from `log.csv`)                                                                                                      |
+| Best validation PSNR | 27.21 dB at epoch 22 (validation loss 0.0742), saved as `best.pth` (see the caveats below)                                                                |
+| Last epoch (25)      | train loss 0.0626, validation PSNR 26.55 dB                                                                                                               |
 
 ![Training curve](assets/training_curve.png)
 
-What can be seen in the demo videos:
+What can be seen in the demo footage:
 
 - The blue cast is reduced and the reef looks more teal, with higher contrast and sharper local detail.
 - Artifacts are visible: a faint checker-like pattern and purple speckle in flat, open water, and a slightly gray-green overall tone.
 
-**About the validation numbers.** The validation frames come from the same videos as the training frames (the last block of every clip, separated by an 8-frame gap). They are useful for monitoring training, but they are optimistic and are **not** a benchmark. The honest test is footage the model never saw, which is why the demo footage was kept outside the dataset entirely.
+Selected epochs from `checkpoints/log.csv` (validation uses a fixed subset of 64 samples):
+
+| Epoch     | Train loss | Val loss | Val PSNR (dB) |
+| --------- | ---------- | -------- | ------------- |
+| 0         | 0.1696     | 0.0987   | 24.20         |
+| 5         | 0.0974     | 0.1242   | 23.40         |
+| 10        | 0.0812     | 0.0943   | 25.56         |
+| 15        | 0.0726     | 0.0965   | 24.95         |
+| 20        | 0.0663     | 0.0842   | 25.94         |
+| 22 (best) | 0.0655     | 0.0742   | 27.21         |
+| 25 (last) | 0.0626     | 0.0806   | 26.55         |
+
+**About the validation numbers.** The validation frames come from the same videos as the training frames (the last block of every clip, separated by an 8-frame gap). They are useful for monitoring training, but they are optimistic and are **not** a benchmark. They are also noisy: with only 64 fixed samples, validation PSNR jumped between about 20.5 dB and 27.2 dB from one epoch to the next, while the training loss fell steadily from 0.170 to 0.063. So the choice of `best.pth` rests on a noisy signal, and a larger validation subset would make it more reliable. The honest test is footage the model never saw, which is why the demo footage was kept outside the dataset entirely.
 
 ## Pretrained weights
 
@@ -78,7 +90,7 @@ Download: **`<GOOGLE_DRIVE_LINK>`**
 
 | File             | Purpose                                                                                                                                             |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `best.pth`       | Weights only (a `state_dict`), selected by best validation PSNR. Use this for inference.                                                            |
+| `best.pth`       | Weights only (a `state_dict`) from epoch 22, selected by best validation PSNR (27.21 dB). Use this for inference.                                   |
 | `underwater.yml` | The configuration the weights were trained with. The model must be built from the same file (the crop size `image_size` is baked into the network). |
 
 Place them like this:
@@ -135,7 +147,7 @@ underwater-enhancement/
 ├── check_loader.py           sanity check for the loader
 ├── train_underwater.py       training script
 ├── infer_video.py            tiled video inference
-└── assets/                   before/after GIFs and the training curve
+└── assets/                   before/after image and the training curve
 ```
 
 Not tracked by Git (create or download them locally):
@@ -160,7 +172,9 @@ test_on_video/    your own demo footage
 
 ## Data
 
-**Source.** Paired underwater video frames (raw and reference) taken from the dataset list at [ddz16/UnderwaterDataset](https://github.com/ddz16/UnderwaterDataset), from the Google Drive folder "Part I" (`raw/` and `reference/`). Please follow the citation and license requirements of the original dataset. The data is not redistributed here.
+**Source.** The paired frames come from **UVE-38K** ([TrentQiQ/UVE-38K](https://github.com/TrentQiQ/UVE-38K)), a real-world underwater video enhancement dataset from Ocean University of China with 50 video sequences and more than 38,000 frames in total. Its raw videos were collected from the Dive+ community and from the URPC underwater object detection dataset. This project uses only **Part I** (five sequences, 3,919 frames) from the dataset's Google Drive folder (`raw/` and `reference/`), which I found through the list at [ddz16/UnderwaterDataset](https://github.com/ddz16/UnderwaterDataset). The authors offer the full dataset on request. Please follow their citation request (see [Credits](#credits-citation-and-license)). The data is not redistributed here.
+
+**About the references.** The reference videos are not physical ground truth. According to the dataset description, the authors produced a pool of candidate results for each frame with 12 existing enhancement methods, volunteers chose the best method for each video, and some videos were refined further for consistency. The model therefore learns to imitate that curated enhancement style, and PSNR against the references measures similarity to that style, not absolute color accuracy.
 
 Categories used (frame counts are per raw/reference pair):
 
@@ -553,6 +567,8 @@ Then convert to H.264 as described in [Inference](#inference) and download the r
 These are untested suggestions:
 
 - Train much longer (resume from `last.pth`), and add a learning rate schedule.
+- Use a larger validation subset (or average several epochs of validation) so that `best.pth` is chosen from a less noisy signal, and consider keeping a moving average of the weights.
+- Request the full UVE-38K from its authors and train on more than Part I, then hold out whole videos for validation instead of the last block of each clip.
 - Evaluate on held-out clips with underwater metrics (for example UIQM and UCIQE) and temporal-consistency measures, in addition to PSNR.
 - Investigate the faint checker-like pattern in flat water: try larger tile overlap, different crop sizes, or training on larger crops.
 - Add a perceptual loss (`lpips` is already installed because the original code imports it) and compare against plain L1.
@@ -563,7 +579,10 @@ These are untested suggestions:
 ## Known limitations
 
 - The model was trained from scratch for a short time on a single GPU, so output quality is modest and artifacts remain.
-- Validation numbers are optimistic (same videos as training) and must not be quoted as benchmark results.
+- Validation numbers are optimistic (same videos as training), noisy (64 fixed samples), and must not be quoted as benchmark results.
+- The references are curated enhancement results, not physical ground truth, so the model learns to imitate a particular style.
+- Only Part I of UVE-38K was used (five sequences, 3,919 frames, about 10 percent of the full dataset), so scene diversity is limited.
+- Training was stopped at epoch 25 of a planned 60 and the training loss was still decreasing, so the model is under-trained.
 - Training and inference are Linux and NVIDIA only, and the build steps were verified only on the versions listed in [Environment](#environment).
 - Output videos have no audio and use the `mp4v` codec until converted.
 - Tiled inference processes each tile independently, which can leave faint seams or texture patterns despite blending.
@@ -571,12 +590,33 @@ These are untested suggestions:
 ## Credits, citation, and license
 
 - **BVI-Mamba** (model code, Apache-2.0): <https://github.com/edhuang1/BVI-Mamba>. If you use this work, please cite the papers requested in that repository's README (including the BVI-RLV dataset paper), and respect its license.
-- **Underwater data**: <https://github.com/ddz16/UnderwaterDataset> and the original dataset papers. Follow their citation and license terms.
+- **Underwater data, UVE-38K** (Yongchang Zhang, Kunqian Li, Qi Qi, Shaobao Hu, and Fei Tian, Ocean University of China): <https://github.com/TrentQiQ/UVE-38K>. The dataset authors ask users to cite the two works listed under [Dataset citation](#dataset-citation). The dataset was found through the list at <https://github.com/ddz16/UnderwaterDataset>.
 - **mamba-ssm**: <https://github.com/state-spaces/mamba>.
-- The code in this repository is released under `[TODO: choose a license, for example MIT or Apache-2.0]`. The original BVI-Mamba code keeps its own license, and the pretrained weights are derived from data covered by the dataset licenses above.
+- The code in this repository is released under `[TODO: choose a license, for example MIT or Apache-2.0]`. The original BVI-Mamba code keeps its own license. The pretrained weights are derived from UVE-38K. I did not find a license file in the UVE-38K repository, so check with its authors before redistributing the data or using the weights beyond research and demonstration.
+
+### Dataset citation
+
+The UVE-38K authors request that users cite the following works:
+
+```bibtex
+@article{qi2021underwater,
+  title={Underwater image co-enhancement with correlation feature matching and joint learning},
+  author={Qi, Qi and Zhang, Yongchang and Tian, Fei and Wu, QM Jonathan and Li, Kunqian and Luan, Xin and Song, Dalei},
+  journal={IEEE Transactions on Circuits and Systems for Video Technology},
+  year={2021},
+  publisher={IEEE}
+}
+
+@article{qi2022sguie,
+  title={SGUIE-Net: Semantic Attention Guided Underwater Image Enhancement with Multi-Scale Perception},
+  author={Qi, Qi and Li, Kunqian and Zheng, Haiyong and Gao, Xiang and Hou, Guojia and Sun, Kun},
+  journal={arXiv preprint arXiv:2201.02832},
+  year={2022}
+}
+```
 
 ## Author
 
-Alfian Adi Pratama. LinkedIn: `[TODO: link]`.
+Alfian Adi Pratama. LinkedIn: `https://www.linkedin.com/in/alfianap/`.
 
 Feedback, issues, and pull requests are welcome.
