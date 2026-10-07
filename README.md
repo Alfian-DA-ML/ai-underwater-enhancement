@@ -590,7 +590,7 @@ These are untested suggestions:
 - **BVI-Mamba** (model code, Apache-2.0): <https://github.com/edhuang1/BVI-Mamba>. If you use this work, please cite the papers requested in that repository's README (including the BVI-RLV dataset paper), and respect its license.
 - **Underwater data, UVE-38K** (Yongchang Zhang, Kunqian Li, Qi Qi, Shaobao Hu, and Fei Tian, Ocean University of China): <https://github.com/TrentQiQ/UVE-38K>. The dataset authors ask users to cite the two works listed under [Dataset citation](#dataset-citation). The dataset was found through the list at <https://github.com/ddz16/UnderwaterDataset>.
 - **mamba-ssm**: <https://github.com/state-spaces/mamba>.
-- The code in this repository is released under `[TODO: choose a license, for example MIT or Apache-2.0]`. The original BVI-Mamba code keeps its own license. The pretrained weights are derived from UVE-38K. I did not find a license file in the UVE-38K repository, so check with its authors before redistributing the data or using the weights beyond research and demonstration.
+- The code in this repository is released under `MIT License`. The original BVI-Mamba code keeps its own license. The pretrained weights are derived from UVE-38K. I did not find a license file in the UVE-38K repository, so check with its authors before redistributing the data or using the weights beyond research and demonstration.
 
 ### Dataset citation
 
