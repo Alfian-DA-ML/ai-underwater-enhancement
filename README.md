@@ -6,7 +6,7 @@
 
 Retraining **BVI-Mamba**, a low-light video enhancement model, on paired underwater footage, with a complete and reproducible pipeline: preprocessing, training, and tiled video inference.
 
-![Before (left) and after (right)](before_after_sample.jpg)
+![Before (left) and after (right)](before_after_sample.png)
 
 _Left: original frame. Right: enhanced by the retrained BVI-Mamba. The footage was not part of the training data._
 
