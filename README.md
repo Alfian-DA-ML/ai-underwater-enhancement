@@ -63,8 +63,6 @@ Training summary:
 | Best validation PSNR | 27.21 dB at epoch 22 (validation loss 0.0742), saved as `best.pth` (see the caveats below)                                                                |
 | Last epoch (25)      | train loss 0.0626, validation PSNR 26.55 dB                                                                                                               |
 
-![Training curve](assets/training_curve.png)
-
 What can be seen in the demo footage:
 
 - The blue cast is reduced and the reef looks more teal, with higher contrast and sharper local detail.
@@ -86,7 +84,7 @@ Selected epochs from `checkpoints/log.csv` (validation uses a fixed subset of 64
 
 ## Pretrained weights
 
-Download: **`<GOOGLE_DRIVE_LINK>`**
+Download: **`[best.pth](https://drive.google.com/drive/folders/1PhrKjF4sSgcrPmnPOjdj0u72C9rquupZ?hl=ID)`**
 
 | File             | Purpose                                                                                                                                             |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -136,7 +134,6 @@ flowchart LR
 ```
 underwater-enhancement/
 ├── README.md
-├── LICENSE
 ├── .gitignore
 ├── requirements.txt          local environment packages (preprocessing and code checks)
 ├── configs/
@@ -146,8 +143,9 @@ underwater-enhancement/
 ├── underwater_loader.py      UnderwaterDataset: 5-frame windows, crops, balanced sampling
 ├── check_loader.py           sanity check for the loader
 ├── train_underwater.py       training script
-├── infer_video.py            tiled video inference
-└── assets/                   before/after image and the training curve
+├── test_on_video/
+│   └── footage.mp4           your footage
+│   └── inference_video.py    inference model to your footage
 ```
 
 Not tracked by Git (create or download them locally):
