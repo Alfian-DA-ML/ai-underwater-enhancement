@@ -4,16 +4,20 @@ venv/
 ENV/
 env/
 
-# Datasets & Test Footage 
-data/
+# Datasets
+data/raw/
+data/reference/
+data_processed/gt
+data_processed/input
 ref/
-test_on_video/
 *.mp4
 *.avi
 *.mov
 
 # Weights, Checkpoints & Model Outputs
-checkpoints/
+checkpoints/best.pth
+checkpoints/last.pth
+checkpoints/ckpt_small.zip
 *.pth
 *.pt
 *.onnx
@@ -31,3 +35,13 @@ __pycache__/
 # System Files
 .DS_Store
 Thumbs.db
+
+# BVI Mamba
+BVI-Mamba/
+
+# Zip file
+*.zip
+
+# Footage
+footage_1/
+footage_2/

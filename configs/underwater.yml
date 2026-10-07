@@ -1,0 +1,28 @@
+dataset:
+  root: "data_processed"
+  split_file: "data_processed/split.json"
+  image_size: 256
+  num_frames: 5
+  num_workers: 4
+  samples_per_epoch: 2000
+  val_samples: 64
+
+model:
+  patch_size: 4
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 16
+  embed_dim: 16
+  window_size: 8
+  patch_norm: True
+  deformable_groups: 8
+  num_extract_block: 5
+  num_reconstruct_block: 10
+  hr_in: True
+  depths: [8, 8, 8, 8]
+  num_heads: [8, 8, 8, 8]
+
+training:
+  batch_size: 4
+  maxepoch: 60
+  lr: 0.0002
