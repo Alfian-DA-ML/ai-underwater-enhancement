@@ -84,7 +84,7 @@ Selected epochs from `checkpoints/log.csv` (validation uses a fixed subset of 64
 
 ## Pretrained weights
 
-Download: **`[best.pth](https://drive.google.com/drive/folders/1PhrKjF4sSgcrPmnPOjdj0u72C9rquupZ?hl=ID)`**
+Download: **[best.pth](https://drive.google.com/drive/folders/1PhrKjF4sSgcrPmnPOjdj0u72C9rquupZ?hl=ID)**
 
 | File             | Purpose                                                                                                                                             |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -615,6 +615,6 @@ The UVE-38K authors request that users cite the following works:
 
 ## Author
 
-Alfian Adi Pratama. LinkedIn: `https://www.linkedin.com/in/alfianap/`.
+Alfian Adi Pratama. [Linkedin](https://www.linkedin.com/in/alfianap/).
 
 Feedback, issues, and pull requests are welcome.
